@@ -35,7 +35,7 @@ def Guill1(n,k,dt):
     t_disc=np.array(listn)* dt
     ax.plot(t_disc,y)
     plt.show()
-    plt.pause(4)
+    plt.pause(0.01)
 while user_decision==True:
     Guill1(n,k,dt)
     user_decision = raw_input("want more?")=="yes"
