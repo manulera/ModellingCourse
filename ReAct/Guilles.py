@@ -5,7 +5,7 @@ import random
 import matplotlib.pyplot as plt
 # Parameters
 
-user_input = ['A', 100,
+user_input = ['A', 1000,
               'B', 0]
 
 k = (0.2,0.1)
@@ -18,7 +18,7 @@ reactions = (
 
 #Function to calculate the possible combinations?
 dt=0.001
-t = np.arange(0, 10, dt)
+t = np.arange(0, 100, dt)
 
 def Stochy2(user_input, reactions, t):
     # Create elements and rows
@@ -104,7 +104,7 @@ def Stochy(elements, init, t, Gamma, k, decay):
         mu=next(i for i, x in enumerate(P > random.random() * P[-1]) if x)
         # One round of the reaction results in the substraction of the column of Gamma
         # corresponding to the reaction from the init values
-        init -= Gamma[:, mu]
+        init += Gamma[:, mu]
         t+=tau_step
         return (init, t)
 
