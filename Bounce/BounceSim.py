@@ -9,7 +9,7 @@ background_colour = (0,0,0)
 
 class Particle():
     def __init__(self):
-        self.size = 20
+        self.size = 25
         self.sizesq = self.size*self.size
         self.x = random.randint(self.size, width-self.size)
         self.y = random.random()*width
@@ -85,7 +85,7 @@ def Collide(partlist):
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Bouncin')
 
-number_of_particles = 15
+number_of_particles = 3
 my_particles = []
 
 for n in range(number_of_particles):
