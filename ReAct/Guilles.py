@@ -3,40 +3,9 @@ import numpy as np
 import math
 import random
 from scipy.integrate import odeint
+import matplotlib.pyplot as plt
 
-# Parameters
-
-user_input = ['A', 100,
-              'B', 0]
-
-k = (10,10)
-
-# Empty reaction ((stoch_1,reactant_1,stoch_2,reactant_2),(stoch_1,product_1,stoch_2,product_2),k)
-reactions = (
-    (1,'A'),(1,'B'),k[0],
-    (1,'B'),(1,'A'),k[1],
-)
-
-dt=0.00001
-t = np.arange(0, 1, dt)
 def AnaSol(elements, init, t, Gamma, k, decay):
-
-    # Write the reaction
-    for i in range(0, Gamma.shape[1]):  # Along the reactions
-        reactants = list()
-        products = list()
-        Ri = Gamma[:, i]
-        for j in range(0, Gamma.shape[0]):  # Along the reactants
-            if Ri[j] < 0:
-                reactants.append(str(abs(Ri[j])) + elements[j])
-            elif Ri[j] > 0:
-                products.append(str(abs(Ri[j])) + elements[j])
-            elif decay:
-                for ele in decay:
-                    if (ele[0], ele[1]) == (j, i):
-                        reactants.append(str(ele[2]) + elements[j])
-                        products.append(str(ele[2]) + elements[j])
-        print reactants, '--k' + str(i) + '-->', products
 
     # Function to calculate V
     def calcV(init, Gamma, k):
@@ -110,28 +79,31 @@ def Guillespy(elements, init, t, Gamma, k, decay):
         return np.cumsum(P)
 
     # ODE system (in format used for odeint)
-    def GuilleStep(init, t, Gamma, k):
+    def GuilleStep(init, t, Gamma, k, tend):
 
         P = calcP(init, Gamma, k)
-        # P[-1] is what Guillespie calls a_0
-        tau_step=(math.log(1)-math.log(random.random()))/(P[-1])
-        # Find the first non-false element in the logical array resulting from > comparison
-        mu=next(i for i, x in enumerate(P > random.random() * P[-1]) if x)
-        # One round of the reaction results in the substraction of the column of Gamma
-        # corresponding to the reaction from the init values
-        init += Gamma[:, mu]
-        t+=tau_step
-        return (init, t)
+        if P[-1]==0:
+            return (init,tend)
+            # The system is dead!
+        else:
+            # P[-1] is what Guillespie calls a_0
+            tau_step=(math.log(1)-math.log(random.random()))/(P[-1])
+            # Find the first non-false element in the logical array resulting from > comparison
+            mu=next(i for i, x in enumerate(P > random.random() * P[-1]) if x)
+            # One round of the reaction results in the substraction of the column of Gamma
+            # corresponding to the reaction from the init values
+            init += Gamma[:, mu]
+            t+=tau_step
+            return (init, t)
 
     tcount=0
     tend=t[-1]
     tguill= [0]
     valsguill= np.array(init)
     while tcount < tend:
-        (init, tcount)=GuilleStep(init, tcount, Gamma, k)
+        (init, tcount)=GuilleStep(init, tcount, Gamma, k, tend)
         valsguill=np.c_[valsguill,np.array(init)]
         tguill.append(tcount)
-
     return np.array(tguill),valsguill
 
 def ReAct(user_input, reactions, t, mode=0):
@@ -163,6 +135,23 @@ def ReAct(user_input, reactions, t, mode=0):
                 Gamma[row[name], j / 3] = sto
         k += (reactions[j + 2],)
 
+    # Write the reaction
+    for i in range(0, Gamma.shape[1]):  # Along the reactions
+        reactants = list()
+        products = list()
+        Ri = Gamma[:, i]
+        for j in range(0, Gamma.shape[0]):  # Along the reactants
+            if Ri[j] < 0:
+                reactants.append(str(abs(Ri[j])) + elements[j])
+            elif Ri[j] > 0:
+                products.append(str(abs(Ri[j])) + elements[j])
+            elif decay:
+                for ele in decay:
+                    if (ele[0], ele[1]) == (j, i):
+                        reactants.append(str(ele[2]) + elements[j])
+                        products.append(str(ele[2]) + elements[j])
+        print reactants, '--k' + str(i) + '-->', products
+
     # Different return depending on none
     if mode==0: # mode 0: Guillespie and Analytical solution
         return (AnaSol(elements, init, t, Gamma, k, decay), Guillespy(elements, init, t, Gamma, k, decay), row, mode)
@@ -170,3 +159,26 @@ def ReAct(user_input, reactions, t, mode=0):
         return (AnaSol(elements, init, t, Gamma, k, decay), (None,None), row, mode)
     else: # mode 2: Guillespie only
         return (None, Guillespy(elements, init, t, Gamma, k, decay), row, mode)
+
+def Guillesplot(solution,t,tguill, valsguill,rows,mode,which2plot=False):
+
+    # If there is not a specific list, plot all of them
+    if not which2plot: which2plot=rows.keys()
+    fig, ax = plt.subplots()
+
+    for i in which2plot:
+        color0=(random.random()/1.1,random.random()/1.1,random.random()/1.1) #Divided by 2 not to get too light colors
+        if mode != 2:
+            ax.plot(t, solution[:, rows[i]], color=color0,label=i)
+        if mode != 1:
+            ax.step(tguill, valsguill[rows[i], :], color=color0)
+
+    # Shrink current axis's height by 10% on the bottom
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0 + box.height * 0.1,
+                     box.width, box.height * 0.9])
+    # Put a legend below current axis
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
+              fancybox=True, shadow=True, ncol=5)
+
+    plt.draw()

@@ -1,6 +1,6 @@
 
 import numpy as np
-from Guilles import ReAct
+from Guilles import *
 import matplotlib.pyplot as plt
 
 
@@ -19,15 +19,6 @@ reactions = (
 dt=0.00001
 t = np.arange(0, 1, dt)
 
-(solution,(tguill, valsguill),names,mode)=ReAct(user_input,reactions,t)
+(solution,(tguill, valsguill),rows,mode)=ReAct(user_input,reactions,t)
 
-fig, ax = plt.subplots()
-
-for i in range(len(names)):
-    if mode!=2:
-        ax.plot(t,solution[:,i])
-    if mode!=1:
-        ax.step(tguill, valsguill[i, :])
-
-# Show over time
-plt.show()
+Guillesplot(solution,tguill, valsguill,rows,mode)

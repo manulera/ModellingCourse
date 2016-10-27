@@ -1,12 +1,12 @@
 
 import numpy as np
-from Guilles import ReAct
+from Guilles import *
 import matplotlib.pyplot as plt
 
-mode=0
+
 # Initial conditions
-user_input = ['A', 500,
-              'B', 500]
+user_input = ['A', 1000,
+              'B', 0]
 # Constants (this is not necessary, they could be filled up already in the reaction tuple)
 k = (10,10)
 
@@ -16,16 +16,9 @@ reactions = (
     (1,'B'),(1,'A'),k[1],
 )
 # dt is used for the analytical calculation, and the
-dt=0.00001
-t = np.arange(0, 1, dt)
+dt=0.0001
+t = np.arange(0, 10, dt)
 
-(solution,(tguill, valsguill),names)=ReAct(user_input,reactions,t,mode)
+(solution,(tguill, valsguill),rows,mode)=ReAct(user_input,reactions,t)
 
-fig, ax = plt.subplots()
-tguill=np.array(tguill)
-for i in range(valsguill.shape[0]):
-    ax.plot(t,solution[:,i])
-    ax.step(tguill, valsguill[i, :])
-
-# Show over time
-plt.show()
+Guillesplot(solution,tguill, valsguill,rows,mode)
