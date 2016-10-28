@@ -16,9 +16,11 @@ reactions = (
     (1,'B'),(1,'A'),k[1],
 )
 # dt is used for the analytical calculation, and the
-dt=0.00001
+dt=0.0001
 t = np.arange(0, 1, dt)
 
 (solution,(tguill, valsguill),rows,mode)=ReAct(user_input,reactions,t)
 
-Guillesplot(solution,tguill, valsguill,rows,mode)
+Guillesplot(solution,t,tguill, valsguill,rows,mode)
+
+plt.show()

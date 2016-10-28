@@ -1,9 +1,0 @@
-# Core functions
-
-* Here there' the code for the three most important functions:
-
-* ReAct: the main function
-    * Input: 
-        * reactions: The reactions writen as a tuple of size 3xN, where N is an int. Each reaction in the system is defined by 3 consecutive elements of the tuple:
-            1. Tuple of reactants (R<sub>i</sub>,SI<sub>i</sub>,R<sub>i+1</sub>,SI<sub>i+1</sub>,...,R<sub>n</sub>,SI<sub>n</sub>), where n is the number of reactants, R<sub>i</sub> 
-            is the name of reactant "i" as a string, and SI<sub>i</sub> is the stoichiometric index 

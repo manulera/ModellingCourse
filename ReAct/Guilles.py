@@ -160,19 +160,25 @@ def ReAct(user_input, reactions, t, mode=0):
     else: # mode 2: Guillespie only
         return (None, Guillespy(elements, init, t, Gamma, k, decay), row, mode)
 
-def Guillesplot(solution,t,tguill, valsguill,rows,mode,which2plot=False):
+def Guillesplot(solution, t, tguill, valsguill, rows, mode, which2plot = False):
 
     # If there is not a specific list, plot all of them
-    if not which2plot: which2plot=rows.keys()
+    if not which2plot:
+        which2plot = rows.keys()
     fig, ax = plt.subplots()
-
+    cmap = plt.get_cmap('jet')
+    line_colors = cmap(np.linspace(0, 1, len(which2plot)))
+    colorind = 0
     for i in which2plot:
-        color0=(random.random()/1.1,random.random()/1.1,random.random()/1.1) #Divided by 2 not to get too light colors
-        if mode != 2:
-            ax.plot(t, solution[:, rows[i]], color=color0,label=i)
-        if mode != 1:
-            ax.step(tguill, valsguill[rows[i], :], color=color0)
+        # color0=np.random.rand(3)
+        # color0 = color0*0.8 / np.linalg.norm(color0)
+        # color0=tuple(color0) #This method is supposed to generate random colors, but colormaps are better
 
+        if mode != 2:
+            ax.plot(t, solution[:, rows[i]], color=line_colors[colorind], label=i)
+        if mode != 1:
+            ax.step(tguill, valsguill[rows[i], :], color=line_colors[colorind])
+        colorind += 1
     # Shrink current axis's height by 10% on the bottom
     box = ax.get_position()
     ax.set_position([box.x0, box.y0 + box.height * 0.1,
@@ -180,5 +186,4 @@ def Guillesplot(solution,t,tguill, valsguill,rows,mode,which2plot=False):
     # Put a legend below current axis
     ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
               fancybox=True, shadow=True, ncol=5)
-
     plt.draw()

@@ -34,5 +34,5 @@ t = np.arange(0, 10, dt)
 
 Guillesplot(solution,t,tguill, valsguill,rows,mode)
 
-Guillesplot(solution,t,tguill, valsguill,rows,mode,['1M3P','1M2P','1M1P'])
+Guillesplot(solution,t,tguill, valsguill,rows,mode,['Rec','1M3P','1M2P','1M1P'])
 plt.show()
