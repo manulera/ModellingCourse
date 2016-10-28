@@ -181,7 +181,7 @@ def ReAct(user_input, reactions, t, mode=0):
     # Gamma will be the stoichiometry matrix. As explained in the notebook, if we only use this matrix to calculate the
     # velocities, enzimes/catalizers for which we do not include an association step cannot be included. To overcome
     # this problem, we introduce decay, a tuple that contains the coordinates of the stoichiometry matrix for the
-    # pairs (species, reaction), where a chemical species behaves as an enzyme/catalizer as described above.
+    # pairs (species, reaction), where a chemical species behaves as an enzyme/catalizer as described above.aaaaaa
     Gamma = np.zeros((len(elements), len(reactions) / 3), int)
     decay = tuple()
 
