@@ -15,12 +15,12 @@ reactions = (
     (1,'A'),(1,'B'),k[0],
     (1,'B'),(1,'A'),k[1],
 )
-# dt is used for the analytical calculation, and the
+# dt is used for the deterministic calculation, and the
 dt=0.0001
 t = np.arange(0, 1, dt)
 
-(solution,(tguill, valsguill),rows,mode)=ReAct(user_input,reactions,t)
+(solution,(tgill, valsgill),rows,mode)=ReAct(user_input,reactions,t)
 
-Gillesplot(solution,t,tguill, valsguill,rows,mode)
+Gillesplot(solution,t,tgill, valsgill,rows,mode)
 
 plt.show()

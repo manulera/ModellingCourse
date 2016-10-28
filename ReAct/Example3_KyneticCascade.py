@@ -25,7 +25,7 @@ reactions = (
     (-1, '1M2P', 1, '1M1'), (1, '1M1P'), k[5],
     (1, '1M1P'), (1, '1M1'), k[6],
 )
-# dt is used for the analytical calculation, and the
+# dt is used for the deterministic calculation, and the
 dt=0.00001
 t = np.arange(0, 10, dt)
 

@@ -15,7 +15,7 @@ reactions = (
     (1,'A'),(1,'B'),k[0],
     (1,'B'),(1,'A'),k[1],
 )
-# dt is used for the analytical calculation, and the
+# dt is used for the deterministic calculation, and the
 dt=0.0001
 t = np.arange(0, 2, dt)
 

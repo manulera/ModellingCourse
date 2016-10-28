@@ -5,9 +5,9 @@ import random
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 
-# Function that calculates the analytical solution, and returns solution, an array of size(len(t),len(init)), containing
-# the values of the concentrations of the chemical species in init for every time point in t
-def AnaSol(elements, init, t, Gamma, k, decay):
+# Function that calculates the deterministic solution, and returns solution, an array of size(len(t),len(init)),
+# containing the values of the concentrations of the chemical species in init for every time point in t
+def DetSol(elements, init, t, Gamma, k, decay):
 
     # Function to calculate V, a np.array that contains for every reaction Ri, the reaction velocity Vi
     def calcV(init, Gamma, k):
@@ -52,7 +52,7 @@ def AnaSol(elements, init, t, Gamma, k, decay):
     solution = odeint(myODE, init, t, args=(Gamma, k,))
     return solution
 
-# Returns tgill, valsgill. tgill is a np.array containing the times where Gillespie reaction steps happened, valsguill
+# Returns tgill, valsgill. tgill is a np.array containing the times where Gillespie reaction steps happened, valsgill
 # is a np.array of size(len(init),len(tgill)). It stores the quantities of all chemical species in the system
 # at the times in tgill
 
@@ -159,8 +159,14 @@ def Gillespy(elements, init, t, Gamma, k, decay):
         tgill.append(tcount)
     return np.array(tgill),valsgill
 
-# Reactions is a tuple with the reactions, see the examples and the notebook to see how to use them.
+# user_input is a list of pairs Xi, amount of Xi. Xi being a string with the number of a chemical species. All the
+# chemical species that appear in the reactions must be declared in this list, and given an initial concentration.
+# reactions is a tuple with the reactions, see the examples and the notebook to see how to use them.
+# t is an np.array with the timepoints for the deterministic calculation. The first and last values are used for
+# gillespie algorithm
+# mode: 0: Deterministic and Stochastic solutions; 1: Deterministic only;2: Stochastic only
 def ReAct(user_input, reactions, t, mode=0):
+
     # Create elements and rows
     # elements is a list containing the names of the chemical species in user_input, in that same order. The rows of the
     # stoichiometry matrix, Gamma, will correspond to the chemical species in elements. For instance, the second row in
@@ -181,21 +187,32 @@ def ReAct(user_input, reactions, t, mode=0):
     # Gamma will be the stoichiometry matrix. As explained in the notebook, if we only use this matrix to calculate the
     # velocities, enzimes/catalizers for which we do not include an association step cannot be included. To overcome
     # this problem, we introduce decay, a tuple that contains the coordinates of the stoichiometry matrix for the
-    # pairs (species, reaction), where a chemical species behaves as an enzyme/catalizer as described above.aaaaaa
+    # pairs (species, reaction), where a chemical species behaves as an enzyme/catalizer as described above.
     Gamma = np.zeros((len(elements), len(reactions) / 3), int)
     decay = tuple()
 
     # k is a tuple that contains the kinetic constants for the reactions, the order corresponds to the order of the
     # reactions in the reactions tuple provided by the user
     k = tuple()
-    for j in range(0, len(reactions), 3):  # Reactants/ +1 Products/ +2 Konstants
-        for ind in range(0, len(reactions[j]), 2):  # In the reactants, get the value for Gamma, and maybe decay
+
+    # Iterate through the reactions tuple: j +0 :Reactants/ +1 Products/ +2 Kinetic constants
+    # This loop constructs gamma and k
+    for j in range(0, len(reactions), 3):
+
+        # Iterate through the tuple the reactants, get the value for Gamma, and maybe decay
+        for ind in range(0, len(reactions[j]), 2):
+            # the odd elements in the tuple are the stoichiometric indexes
             sto = reactions[j][ind]
+            # the even elements in the tuple are the names of the species
             name = reactions[j][ind + 1]
+
+            # "normal" indexes
             if sto > 0:
                 Gamma[row[name], j / 3] = -sto
+            # negative indexes, decay
             else:
                 decay += ((row[name], j / 3, abs(sto)),)
+
         for ind in range(0, len(reactions[j + 1]), 2):  # In the products, get the value for Gamma
             sto = reactions[j + 1][ind]
             name = reactions[j + 1][ind + 1]
@@ -203,7 +220,7 @@ def ReAct(user_input, reactions, t, mode=0):
                 Gamma[row[name], j / 3] = sto
         k += (reactions[j + 2],)
 
-    # Write the reaction
+    # Print the reaction
     for i in range(0, Gamma.shape[1]):  # Along the reactions
         reactants = list()
         products = list()
@@ -221,10 +238,10 @@ def ReAct(user_input, reactions, t, mode=0):
         print reactants, '--k' + str(i) + '-->', products
 
     # Different return depending on none
-    if mode==0: # mode 0: gillespie and Analytical solution
-        return (AnaSol(elements, init, t, Gamma, k, decay), Gillespy(elements, init, t, Gamma, k, decay), row, mode)
-    elif mode==1:# mode 1: Analytical solution only
-        return (AnaSol(elements, init, t, Gamma, k, decay), (None,None), row, mode)
+    if mode==0: # mode 0: gillespie and Deterministic solution
+        return (DetSol(elements, init, t, Gamma, k, decay), Gillespy(elements, init, t, Gamma, k, decay), row, mode)
+    elif mode==1:# mode 1: Deterministic solution only
+        return (DetSol(elements, init, t, Gamma, k, decay), (None,None), row, mode)
     else: # mode 2: gillespie only
         return (None, Gillespy(elements, init, t, Gamma, k, decay), row, mode)
 
