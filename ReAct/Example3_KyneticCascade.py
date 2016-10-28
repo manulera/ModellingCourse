@@ -1,6 +1,6 @@
 
 import numpy as np
-from Guilles import *
+from Gilles import *
 import matplotlib.pyplot as plt
 
 # Initial conditions
@@ -29,10 +29,10 @@ reactions = (
 dt=0.00001
 t = np.arange(0, 10, dt)
 
-(solution,(tguill, valsguill),rows,mode)=ReAct(user_input,reactions,t)
+(solution,(tgill, valsgill),rows,mode)=ReAct(user_input,reactions,t)
 
 
-Guillesplot(solution,t,tguill, valsguill,rows,mode)
+Gillesplot(solution,t,tgill, valsgill,rows,mode)
 
-Guillesplot(solution,t,tguill, valsguill,rows,mode,['Rec','1M3P','1M2P','1M1P'])
+Gillesplot(solution,t,tgill, valsgill,rows,mode,['Rec','1M3P','1M2P','1M1P'])
 plt.show()

@@ -1,6 +1,6 @@
 
 import numpy as np
-from Guilles import *
+from Gilles import *
 import matplotlib.pyplot as plt
 
 
@@ -21,6 +21,6 @@ t = np.arange(0, 1, dt)
 
 (solution,(tguill, valsguill),rows,mode)=ReAct(user_input,reactions,t)
 
-Guillesplot(solution,t,tguill, valsguill,rows,mode)
+Gillesplot(solution,t,tguill, valsguill,rows,mode)
 
 plt.show()

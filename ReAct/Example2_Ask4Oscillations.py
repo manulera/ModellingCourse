@@ -1,6 +1,6 @@
 
 import numpy as np
-from Guilles import *
+from Gilles import *
 import matplotlib.pyplot as plt
 
 
@@ -17,10 +17,10 @@ reactions = (
 )
 # dt is used for the analytical calculation, and the
 dt=0.0001
-t = np.arange(0, 4, dt)
+t = np.arange(0, 2, dt)
 
-(solution,(tguill, valsguill),rows,mode)=ReAct(user_input,reactions,t)
+(solution,(tgill, valsgill),rows,mode)=ReAct(user_input,reactions,t)
 
-Guillesplot(solution,t,tguill, valsguill,rows,mode)
+Gillesplot(solution,t,tgill, valsgill,rows,mode)
 
 plt.show()
