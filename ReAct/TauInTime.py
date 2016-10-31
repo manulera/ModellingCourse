@@ -15,7 +15,7 @@ reactions = (
 )
 # dt is used for the deterministic calculation, and the
 dt=0.1
-t = np.arange(0, 1000, dt)
+t = np.arange(0, 10, dt)
 SolList=list()
 (solution, (tgill, valsgill), rows, mode) = ReAct(user_input, reactions, t)
 Gillesplot(solution,t,tgill, valsgill,rows,mode)

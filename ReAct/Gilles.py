@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 # Function that calculates the deterministic solution, and returns solution, an array of size(len(t),len(init)),
 # containing the values of the concentrations of the chemical species in init for every time point in t
 def DetSol(elements, init, t, Gamma, k, decay):
-
     # Function to calculate V, a np.array that contains for every reaction Ri, the reaction velocity Vi
     def calcV(init, Gamma, k):
 
