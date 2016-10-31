@@ -56,7 +56,7 @@ def DetSol(elements, init, t, Gamma, k, decay):
 # is a np.array of size(len(init),len(tgill)). It stores the quantities of all chemical species in the system
 # at the times in tgill
 
-def Gillespy(elements, init, t, Gamma, k, decay):
+def Gillespy(elements, init, t, Gamma, k, decay, rounds = 0):
 
     # Returns the number of possible collisions * index!(factorial), we will see why
     def Comby(quant, index):
@@ -135,29 +135,39 @@ def Gillespy(elements, init, t, Gamma, k, decay):
             tcount += tau_step
             return (init, tcount)
 
-    # tcount increases by tau_step every time gilleStep is called
-    tcount = 0
+    # These lists will contain as many elements as indicated by the number "rounds", corresponding to several Gillespie
+    # calculations.
+    tgill_all = list()
+    valsgill_all = list()
+    old_init=init
+    for i in range(rounds):
+        init=old_init
+        # tcount increases by tau_step every time gilleStep is called
+        tcount = 0
 
-    # When tcount reaches the time limit indicated by the user, stop the algorithm
-    tend = t[-1]
+        # When tcount reaches the time limit indicated by the user, stop the algorithm
+        tend = t[-1]
 
-    # tgill stores all the values of tcount, so we can plot the progression of the system in time afterwards
-    tgill = [0]
+        # tgill stores all the values of tcount, so we can plot the progression of the system in time afterwards
+        tgill = [0]
 
-    # valsgill is a np.array of size(len(init),numsteps), where numsteps is the number of gillespie steps performed.
-    # It stores the quantities of all chemical species in the system at the times in tgill
-    # It increases size every time, which is not very efficient, but if we want the calculation to stop when we reach a
-    # certain value of tcount, we cannot know how many steps we will make, so we cannot prelocate the memory
-    valsgill = np.array(init)
+        # valsgill is a np.array of size(len(init),numsteps), where numsteps is the number of gillespie steps performed.
+        # It stores the quantities of all chemical species in the system at the times in tgill
+        # It increases size every time, which is not very efficient, but if we want the calculation to stop when we reach a
+        # certain value of tcount, we cannot know how many steps we will make, so we cannot prelocate the memory
+        valsgill = np.array(init)
+        while tcount < tend:
+            (init, tcount)=gilleStep(init, tcount, Gamma, k, tend)
 
-    while tcount < tend:
-        (init, tcount)=gilleStep(init, tcount, Gamma, k, tend)
+            # Append the values to valsgill
+            valsgill = np.c_[valsgill,np.array(init)]
 
-        # Append the values to valsgill
-        valsgill=np.c_[valsgill,np.array(init)]
+            tgill.append(tcount)
 
-        tgill.append(tcount)
-    return np.array(tgill),valsgill
+        valsgill_all.append(valsgill)
+        tgill_all.append(tgill)
+
+    return np.array(tgill_all),valsgill_all
 
 # user_input is a list of pairs Xi, amount of Xi. Xi being a string with the number of a chemical species. All the
 # chemical species that appear in the reactions must be declared in this list, and given an initial concentration.
@@ -165,7 +175,7 @@ def Gillespy(elements, init, t, Gamma, k, decay):
 # t is an np.array with the timepoints for the deterministic calculation. The first and last values are used for
 # gillespie algorithm
 # mode: 0: Deterministic and Stochastic solutions; 1: Deterministic only;2: Stochastic only
-def ReAct(user_input, reactions, t, mode=0):
+def ReAct(user_input, reactions, t, mode = 0, rounds = 1):
 
     # Create elements and rows
     # elements is a list containing the names of the chemical species in user_input, in that same order. The rows of the
@@ -239,11 +249,11 @@ def ReAct(user_input, reactions, t, mode=0):
 
     # Different return depending on none
     if mode==0: # mode 0: gillespie and Deterministic solution
-        return (DetSol(elements, init, t, Gamma, k, decay), Gillespy(elements, init, t, Gamma, k, decay), row, mode)
+        return (DetSol(elements, init, t, Gamma, k, decay), Gillespy(elements, init, t, Gamma, k, decay, rounds), row, mode)
     elif mode==1:# mode 1: Deterministic solution only
         return (DetSol(elements, init, t, Gamma, k, decay), (None,None), row, mode)
     else: # mode 2: gillespie only
-        return (None, Gillespy(elements, init, t, Gamma, k, decay), row, mode)
+        return (None, Gillespy(elements, init, t, Gamma, k, decay, rounds), row, mode)
 
 
 def Gillesplot(solution, t, tgill, valsgill, rows, mode, which2plot = False):
@@ -251,7 +261,8 @@ def Gillesplot(solution, t, tgill, valsgill, rows, mode, which2plot = False):
     # If there is not a specific list, plot all of them
     if not which2plot:
         which2plot = rows.keys()
-    fig, ax = plt.subplots()
+    #fig, ax = plt.subplots()
+    ax =plt.gca()
     cmap = plt.get_cmap('jet')
     line_colors = cmap(np.linspace(0, 1, len(which2plot)))
     colorind = 0
@@ -263,7 +274,8 @@ def Gillesplot(solution, t, tgill, valsgill, rows, mode, which2plot = False):
         if mode != 2:
             ax.plot(t, solution[:, rows[i]], color=line_colors[colorind], label=i)
         if mode != 1:
-            ax.step(tgill, valsgill[rows[i], :], color=line_colors[colorind])
+            for j in range(len(tgill)):
+                ax.step(tgill[j], valsgill[j][rows[i], :], color=line_colors[colorind])
         colorind += 1
     # Shrink current axis's height by 10% on the bottom
     box = ax.get_position()
