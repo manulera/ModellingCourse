@@ -23,7 +23,7 @@ ax = plt.gca()
 for i in range(20):
     (solution,(tgill, valsgill),rows,mode)=ReAct(user_input,reactions,t)
     diff_tau = np.diff(tgill[0])
-    ax.plot(np.squeeze(tgill)[1:], diff_tau)
+    ax.step(np.squeeze(tgill)[1:], diff_tau*100)
     print diff_tau[-1]
     print
 
