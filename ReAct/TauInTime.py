@@ -14,9 +14,9 @@ reactions = (
     (1,'A'),(),k,
 )
 # dt is used for the deterministic calculation, and the
-dt=0.1
+dt = 0.1
 t = np.arange(0, 10, dt)
-SolList=list()
+SolList = list()
 (solution, (tgill, valsgill), rows, mode) = ReAct(user_input, reactions, t)
 Gillesplot(solution,t,tgill, valsgill,rows,mode)
 ax = plt.gca()
@@ -28,8 +28,6 @@ for i in range(20):
     print
 
 ax=plt.gca()
-
-
 
 plt.show()
 

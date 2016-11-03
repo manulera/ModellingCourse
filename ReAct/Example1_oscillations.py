@@ -19,7 +19,7 @@ reactions = (
 dt=0.0001
 t = np.arange(0, 1, dt)
 
-(solution,(tgill, valsgill),rows,mode)=ReAct(user_input,reactions,t)
+(solution,(tgill, valsgill,all_mus, all_taus),rows,mode)=ReAct(user_input,reactions,t)
 
 Gillesplot(solution,t,tgill, valsgill,rows,mode)
 

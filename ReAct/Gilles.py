@@ -132,13 +132,15 @@ def Gillespy(elements, init, t, Gamma, k, decay, rounds = 0):
             init += Gamma[:, mu]
             # We add to the counter of the time the tau_step
             tcount += tau_step
-            return (init, tcount)
+            return (init, tcount,mu,tau_step)
 
     # These lists will contain as many elements as indicated by the number "rounds", corresponding to several Gillespie
     # calculations.
     tgill_all = list()
     valsgill_all = list()
     old_init=init
+    mus_all = list()
+    taus_all = list()
     for i in range(rounds):
         init=old_init
         # tcount increases by tau_step every time gilleStep is called
@@ -155,18 +157,25 @@ def Gillespy(elements, init, t, Gamma, k, decay, rounds = 0):
         # It increases size every time, which is not very efficient, but if we want the calculation to stop when we reach a
         # certain value of tcount, we cannot know how many steps we will make, so we cannot prelocate the memory
         valsgill = np.array(init)
+        mus=list()
+        taus=list()
         while tcount < tend:
-            (init, tcount)=gilleStep(init, tcount, Gamma, k, tend)
+            (init, tcount, mu, tau)=gilleStep(init, tcount, Gamma, k, tend)
 
             # Append the values to valsgill
             valsgill = np.c_[valsgill,np.array(init)]
 
             tgill.append(tcount)
+            mus.append(mu)
+            taus.append(tau)
 
+        taus_all.append(np.array(taus))
+        mus_all.append(np.array(mus))
         valsgill_all.append(valsgill)
         tgill_all.append(tgill)
 
-    return np.array(tgill_all),valsgill_all
+
+    return np.array(tgill_all),valsgill_all,mus_all,taus_all
 
 # user_input is a list of pairs Xi, amount of Xi. Xi being a string with the number of a chemical species. All the
 # chemical species that appear in the reactions must be declared in this list, and given an initial concentration.
