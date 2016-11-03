@@ -160,7 +160,6 @@ def Gillespy(elements, init, t, Gamma, k, decay, rounds = 0):
         mus=list()
         taus=list()
         while tcount < tend:
-            print gilleStep(init, tcount, Gamma, k, tend)
             (init, tcount, mu, tau)=gilleStep(init, tcount, Gamma, k, tend)
             # Append the values to valsgill
             valsgill = np.c_[valsgill,np.array(init)]

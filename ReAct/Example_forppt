@@ -22,7 +22,7 @@ reactions = (
 dt=0.0001
 t = np.arange(0, 1, dt)
 
-(solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t,mode=1)
+(solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t)
 
 Gillesplot(solution,t,tgill, valsgill,rows,mode)
 
@@ -30,6 +30,6 @@ ax=plt.gca()
 
 print ax.lines
 for i in ax.lines:
-    i.set_linewidth(5.0)
+    i.set_linewidth(3.0)
 plt.draw()
-plt.savefig('Exampleppt1.png')
+plt.savefig('Exampleppt2.png')
