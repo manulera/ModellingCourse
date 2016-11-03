@@ -24,18 +24,21 @@ fig = plt.figure()
 
 Gillesplot(solution,t,tgill, valsgill,rows,mode)
 
-for i in np.arange(0,0.5,0.05):
+j=0
+f, axarr = plt.subplots(1, 10)
+for i in np.arange(0,0.3,0.03):
 
-    A,X,Y = EquationMaker(reactions,tgill,all_mus, all_taus,i,i+0.05)
-    print A
+    A,X,Y = EquationMaker(reactions,tgill,all_mus, all_taus,i,i+0.02)
+
     Y,X=np.meshgrid(Y,X)
 
-    fig = plt.figure()
-    #ax = fig.gca(projection='3d')
+
+    #ax = fig.ffffsdfsdfgca(projection='3d')
 
     #ax.plot_surface(X,Y,A, rstride=1, cstride=1, cmap='hot', linewidth=0, antialiased=False)
-    plt.imshow(A, cmap='hot')
+    axarr[j].imshow(A[:5,:], cmap='hot')
+    j+=1
 
-    plt.draw()
+plt.draw()
 
 plt.show()

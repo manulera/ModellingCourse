@@ -21,7 +21,7 @@ t = np.arange(0, 0.5, dt)
 
 fig, ax = plt.subplots()
 for i in range(4):
-    (solution,(tgill, valsgill),rows,mode)=ReAct(user_input,reactions,t,rounds=50)
+    (solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t,rounds=50)
 
     curves = CurveAverager(tgill,valsgill,t)
 

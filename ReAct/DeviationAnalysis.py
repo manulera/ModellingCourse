@@ -31,7 +31,6 @@ def EquationMaker(reactions,tgill,all_mus, all_taus,tmin,tmax,nbins=10):
 
     numreactions = len(reactions)/3
     rounds = len(tgill)
-    print tmin, tmax
     mu_pairs=np.array([])
     tau_pairs=np.array([])
 

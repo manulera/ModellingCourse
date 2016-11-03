@@ -29,10 +29,10 @@ reactions = (
 dt=0.00001
 t = np.arange(0, 10, dt)
 
-(solution,(tgill, valsgill),rows,mode)=ReAct(user_input,reactions,t)
+(solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t)
 
 
 Gillesplot(solution,t,tgill, valsgill,rows,mode)
-
+plt.figure()
 Gillesplot(solution,t,tgill, valsgill,rows,mode,['Rec','1M3P','1M2P','1M1P'])
 plt.show()

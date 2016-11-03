@@ -115,7 +115,7 @@ def Gillespy(elements, init, t, Gamma, k, decay, rounds = 0):
         # Sometimes, you can reach a situation where the propensity of all reactions is 0; stop
         # your algorithm then, otherwise it will return an error when it tries to divide by P
         if P[-1]==0:
-            return (init,tend)
+            return (init,tend,None,None)
             # The system is dead! Sometimes, you can reach a situation where the propensity of all reactions is 0,
             # stop your algorithm then, otherwise it will return an error when it tries to divide by P
         else:
@@ -160,8 +160,8 @@ def Gillespy(elements, init, t, Gamma, k, decay, rounds = 0):
         mus=list()
         taus=list()
         while tcount < tend:
+            print gilleStep(init, tcount, Gamma, k, tend)
             (init, tcount, mu, tau)=gilleStep(init, tcount, Gamma, k, tend)
-
             # Append the values to valsgill
             valsgill = np.c_[valsgill,np.array(init)]
 

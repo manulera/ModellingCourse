@@ -22,7 +22,7 @@ reactions = (
 dt=0.0001
 t = np.arange(0, 1, dt)
 
-(solution,(tgill, valsgill),rows,mode)=ReAct(user_input,reactions,t,mode=1)
+(solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t,mode=1)
 
 Gillesplot(solution,t,tgill, valsgill,rows,mode)
 
