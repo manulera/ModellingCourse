@@ -30,16 +30,15 @@ def StoSol(init,t,k):
         stosol[i,:]=init
     return stosol
 
-stosolution=StoSol(init,t,k)
+# stosolution=StoSol(init,t,k)
 
 
 plt.figure()
 
 plt.plot(t,detsolution[:,0],label='prey')
 plt.plot(t,detsolution[:,1],label='predator')
-plt.step(t,stosolution[:,0],label='prey')
-plt.step(t,stosolution[:,1],label='predator')
+# plt.step(t,stosolution[:,0],label='prey')
+# plt.step(t,stosolution[:,1],label='predator')
 
-print stosolution
 plt.legend()
 plt.show()

@@ -258,7 +258,7 @@ def ReAct(user_input, reactions, t, mode = 0, rounds = 1):
     if mode==0: # mode 0: gillespie and Deterministic solution
         return (DetSol(elements, init, t, Gamma, k, decay), Gillespy(elements, init, t, Gamma, k, decay, rounds), row, mode)
     elif mode==1:# mode 1: Deterministic solution only
-        return (DetSol(elements, init, t, Gamma, k, decay), (None,None), row, mode)
+        return (DetSol(elements, init, t, Gamma, k, decay), (None,None,None,None), row, mode)
     else: # mode 2: gillespie only
         return (None, Gillespy(elements, init, t, Gamma, k, decay, rounds), row, mode)
 
