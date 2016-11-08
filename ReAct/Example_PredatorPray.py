@@ -27,16 +27,15 @@ k=[10,0.11,0.01,1]
 reactions = (
     (-1,'Prey'),(1,'Prey'),k[0], # Birth of a prey, would be interesting to see if we change the stoch to 2 for A
     (-1,'Pred',1,'Prey'),(),k[1], # Prey is hunted, analogy is a catalizer for degradation
-    (1,'Prey',-1,'Pred'),(1,'Pred'),k[2], # Predators nourrish on prey
+    (-1,'Pred',1,'Prey'),(1,'Pred'),k[2], # Predators nourrish on prey
     (1,'Pred'),(),k[3] # Predators die
 )
-print reactions
 # dt is used for the deterministic calculation, and the
 dt=0.0001
 t = np.arange(0, 10, dt)
 
 (solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t)
-print np.min(valsgill[0][0,:])
+
 Gillesplot(solution,t,tgill, valsgill,rows,mode)
 
 plt.show()

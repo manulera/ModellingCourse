@@ -34,8 +34,8 @@ reactions = (
     (1, 'Isite1_b'), (1, 'Prot',1,'Isite1'), 1,
 )
 # dt is used for the deterministic calculation, and the
-dt=0.01
-t = np.arange(0, 100, dt)
+dt=1
+t = np.arange(0, 10000, dt)
 
 (solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t,mode=1)
 
