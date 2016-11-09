@@ -33,7 +33,7 @@ for i in np.arange(0,0.3,0.03):
     Y,X=np.meshgrid(Y,X)
 
 
-    #ax = fig.ffffsdfsdfgca(projection='3d')
+    #ax = fig.gca(projection='3d')
 
     #ax.plot_surface(X,Y,A, rstride=1, cstride=1, cmap='hot', linewidth=0, antialiased=False)
     axarr[j].imshow(A[:5,:], cmap='hot')

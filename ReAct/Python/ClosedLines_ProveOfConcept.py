@@ -7,7 +7,7 @@ import random
 
 x = np.linspace(0,2*np.pi)
 
-A = np.sin(x)
+A = np.absolute(np.sin(x))
 
 B = np.cos(x)
 

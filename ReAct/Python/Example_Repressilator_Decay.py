@@ -2,13 +2,13 @@
 import numpy as np
 from Gilles import *
 import matplotlib.pyplot as plt
-
+from ColorLine import *
 from mpl_toolkits.mplot3d import Axes3D
 
 # Initial conditions
 user_input = ['TetR_site', 1,
               'TetR_site_b', 0,
-              'TetR_mRNA', 10,
+              'TetR_mRNA', 0,
               'TetR_Prot', 0,
               'TetR_Prot2', 0,
 
@@ -32,7 +32,7 @@ user_input = ['TetR_site', 1,
 
 # Reaction template ((stoch_1,reactant_1,stoch_2,reactant_2),(stoch_1,product_1,stoch_2,product_2),k)
 
-k = (100, 50, 40, 20, 3, 1, 0.3, 0.1)
+k = (100, 50, 40, 20, 3, 1, 0, 30, 10)
 reactions = (
 
     (-1,'TetR_site'), (1, 'TetR_mRNA'), k[0] , # mRNA transcription
@@ -47,9 +47,11 @@ reactions = (
 
     (1, 'TetR_Prot2'), (2, 'TetR_Prot'),  k[5],
 
-    (1, 'TetR_Prot2',1,'Gammacl_site'), (1,'Gammacl_site_b'), k[6], # Binding of the repressor
+    (1, 'TetR_Prot2'), (), k[6],
 
-    (1, 'Gammacl_site_b'), (1, 'TetR_Prot2',1,'Gammacl_site'), k[7], # Unbinding of the repressor
+    (1, 'TetR_Prot2',1,'Gammacl_site'), (1,'Gammacl_site_b'), k[7], # Binding of the repressor
+
+    (1, 'Gammacl_site_b'), (1, 'TetR_Prot2',1,'Gammacl_site'), k[8], # Unbinding of the repressor
 
     # ------------------------------------------------------------------------------------------------------------------
 
@@ -65,9 +67,11 @@ reactions = (
 
     (1, 'Gammacl_Prot2'), (2, 'Gammacl_Prot'),  k[5],
 
-    (1, 'Gammacl_Prot2', 1, 'LacI_site'), (1, 'LacI_site_b'), k[6],  # Binding of the repressor
+    (1, 'Gammacl_Prot2'), (), k[6],
 
-    (1, 'LacI_site_b'), (1, 'Gammacl_Prot2', 1, 'LacI_site'), k[7],  # Unbinding of the repressor
+    (1, 'Gammacl_Prot2', 1, 'LacI_site'), (1, 'LacI_site_b'), k[7],  # Binding of the repressor
+
+    (1, 'LacI_site_b'), (1, 'Gammacl_Prot2', 1, 'LacI_site'), k[8],  # Unbinding of the repressor
 
     # ------------------------------------------------------------------------------------------------------------------
 
@@ -83,9 +87,11 @@ reactions = (
 
     (1, 'LacI_Prot2'), (2, 'LacI_Prot'),  k[5],
 
-    (1, 'LacI_Prot2', 1, 'TetR_site'), (1, 'TetR_site_b'), k[6],  # Binding of the repressor
+    (1, 'LacI_Prot2'), (), k[6],
 
-    (1, 'TetR_site_b'), (1, 'LacI_Prot2', 1, 'TetR_site'), k[7],  # Unbinding of the repressor
+    (1, 'LacI_Prot2', 1, 'TetR_site'), (1, 'TetR_site_b'), k[7],  # Binding of the repressor
+
+    (1, 'TetR_site_b'), (1, 'LacI_Prot2', 1, 'TetR_site'), k[8],  # Unbinding of the repressor
 
     # ------------------------------------------------------------------------------------------------------------------
 
@@ -103,14 +109,12 @@ reactions = (
 
 )
 # dt is used for the deterministic calculation, and the
-dt=0.1
-t = np.arange(0, 50, dt)
+dt=0.01
+t = np.arange(0, 80, dt)
 
-(solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t)
+(solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t,mode=1)
 
 Gillesplot(solution,t,tgill, valsgill,rows,mode,which2plot=['TetR_Prot','Gammacl_Prot','LacI_Prot','GFP_Prot'])
-
-#plt.plot(valsgill[0][0,:], valsgill[0][1,:], linewidth=2)
 
 fig = plt.figure()
 ax = fig.gca(projection='3d')

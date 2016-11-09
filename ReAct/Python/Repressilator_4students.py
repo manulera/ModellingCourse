@@ -8,7 +8,7 @@ from mpl_toolkits.mplot3d import Axes3D
 # Initial conditions
 user_input = ['TetR_site', 1,
               'TetR_site_b', 0,
-              'TetR_mRNA', 10,
+              'TetR_mRNA', 0,
               'TetR_Prot', 0,
               'TetR_Prot2', 0,
 
@@ -32,7 +32,7 @@ user_input = ['TetR_site', 1,
 
 # Reaction template ((stoch_1,reactant_1,stoch_2,reactant_2),(stoch_1,product_1,stoch_2,product_2),k)
 
-k = (100, 50, 40, 20, 3, 1, 0.3, 0.1)
+k = ()
 reactions = (
 
     (-1,'TetR_site'), (1, 'TetR_mRNA'), k[0] , # mRNA transcription
@@ -104,17 +104,12 @@ reactions = (
 )
 # dt is used for the deterministic calculation, and the
 dt=0.1
-t = np.arange(0, 50, dt)
+t = np.arange(0, 100, dt)
 
-(solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t)
+(solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t,mode=1)
 
 Gillesplot(solution,t,tgill, valsgill,rows,mode,which2plot=['TetR_Prot','Gammacl_Prot','LacI_Prot','GFP_Prot'])
 
 #plt.plot(valsgill[0][0,:], valsgill[0][1,:], linewidth=2)
-
-fig = plt.figure()
-ax = fig.gca(projection='3d')
-
-plt.plot(solution[:,rows['TetR_Prot']],solution[:,rows['Gammacl_Prot']],solution[:,rows['LacI_Prot']])
 
 plt.show()
