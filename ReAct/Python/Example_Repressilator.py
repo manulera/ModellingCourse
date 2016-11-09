@@ -25,7 +25,7 @@ user_input = ['TetR_site', 1,
 
 # Reaction template ((stoch_1,reactant_1,stoch_2,reactant_2),(stoch_1,product_1,stoch_2,product_2),k)
 
-k = (10, 2, 100, 5, 0.05, 0.5)
+k = (10, 20, 10, 20, 0.05, 0.5)
 reactions = (
 
     (-1,'TetR_site'), (1, 'TetR_mRNA'), k[0] , # mRNA transcription
