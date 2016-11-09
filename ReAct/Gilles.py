@@ -91,16 +91,22 @@ def Gillespy(elements, init, t, Gamma, k, decay, rounds = 0):
             Pi = 1
             Ri = Gamma[:, i]
             for j in range(0, Gamma.shape[0]):  # Iterate along the chemical species in the system
-
-                if Ri[j] < 0:
-                    # Ri[j] is the stochiometry index of the element j
-                    # init[j] is the number of molecules of element j
-                    Pi *= Comby(init[j], -Ri[j])
-
+                # This is to solve some very particular situations in which one of the species acts both as a "normal"
+                # reactant, and as a catalizer, for instance: 2A + B -> C + A
+                counted = 0
                 if decay:
                     for ele in decay:
                         if (ele[0], ele[1]) == (j, i):
-                            Pi *= Comby(init[j], ele[2])
+                            # In case one of the elements is catalizer and also "normal reactant. Probably it's somehow
+                            # redundant, one should check it.
+                            Pi *= Comby(init[j], ele[2] - Ri[j]*(Ri[j] < 0))
+                            counted = 1
+                if not counted and Ri[j] < 0:
+                    # Ri[j] is the stochiometry index of the element j
+                    # init[j] is the number of molecules of element j
+                    Pi *= Comby(init[j], -Ri[j])
+                    counted = -Ri[j]
+
             Px.append(Pi * k[i])
         return np.cumsum(Px)
 
@@ -228,7 +234,6 @@ def ReAct(user_input, reactions, t, mode = 0, rounds = 1):
                 Gamma[row[name], j / 3] = -sto
             # negative indexes, decay
             else:
-                print name
                 decay += ((row[name], j / 3, abs(sto)),)
 
         for ind in range(0, len(reactions[j + 1]), 2):  # In the products, get the value for Gamma
@@ -237,7 +242,6 @@ def ReAct(user_input, reactions, t, mode = 0, rounds = 1):
             if sto > 0:
                 Gamma[row[name], j / 3] = sto
         k += (reactions[j + 2],)
-    print decay
     # Print the reaction
     for i in range(0, Gamma.shape[1]):  # Along the reactions
         reactants = list()

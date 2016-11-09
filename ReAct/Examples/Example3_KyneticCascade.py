@@ -9,7 +9,7 @@ user_input = ['Rec', 10,
               '1M3P', 0,
               '1M2', 20,
               '1M2P', 0,
-              '1M1', 30,
+              '1M1', 10,
               '1M1P', 0]
 
 # Constants (this is not necessary, they could be filled up already in the reaction tuple)
