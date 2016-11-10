@@ -32,7 +32,7 @@ user_input = ['TetR_site', 1,
 
 # Reaction template ((stoch_1,reactant_1,stoch_2,reactant_2),(stoch_1,product_1,stoch_2,product_2),k)
 
-k = (100, 20, 600, 4, 0.3, 1, 0.3, 1)
+k = (100, 50, 400, 20, 0.3, 0.1, 0.3, 0.1)
 reactions = (
 
     (-1,'TetR_site'), (1, 'TetR_mRNA'), k[0] , # mRNA transcription
@@ -89,24 +89,24 @@ reactions = (
 
     # ------------------------------------------------------------------------------------------------------------------
 
-    # (-1, 'GFP_site'), (1, 'GFP_mRNA'), k[0]*3,  # mRNA transcription
-    #
-    # (1, 'GFP_mRNA'), (), k[1],  # mRNA degradation
-    #
-    # (-1, 'GFP_mRNA'), (1, 'GFP_Prot'), k[2],  # Translation
-    #
-    # (1, 'GFP_Prot'), (), k[3],  # Protein degradation
-    #
-    # (1, 'TetR_Prot2',1,'GFP_site'), (1,'GFP_site_b'), k[4], # Binding of the repressor
-    #
-    # (1, 'GFP_site_b'), (1, 'TetR_Prot2',1,'GFP_site'), k[5], # Unbinding of the repressor
+    (-1, 'GFP_site'), (1, 'GFP_mRNA'), k[0]*3,  # mRNA transcription
+
+    (1, 'GFP_mRNA'), (), k[1],  # mRNA degradation
+
+    (-1, 'GFP_mRNA'), (1, 'GFP_Prot'), k[2],  # Translation
+
+    (1, 'GFP_Prot'), (), k[3],  # Protein degradation
+
+    (1, 'TetR_Prot2',1,'GFP_site'), (1,'GFP_site_b'), k[4], # Binding of the repressor
+
+    (1, 'GFP_site_b'), (1, 'TetR_Prot2',1,'GFP_site'), k[5], # Unbinding of the repressor
 
 )
 # dt is used for the deterministic calculation, and the
 dt=1
 t = np.arange(0, 5000, dt)
 
-(solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t)
+(solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t,mode=1)
 
 Gillesplot(solution,t,tgill, valsgill,rows,mode,which2plot=['TetR_Prot','Gammacl_Prot','LacI_Prot','GFP_Prot'])
 
