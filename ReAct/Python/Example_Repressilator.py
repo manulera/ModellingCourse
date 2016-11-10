@@ -104,9 +104,9 @@ reactions = (
 )
 # dt is used for the deterministic calculation, and the
 dt=1
-t = np.arange(0, 5000, dt)
+t = np.arange(0, 500, dt)
 
-(solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t)
+(solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t,mode=1)
 
 Gillesplot(solution,t,tgill, valsgill,rows,mode,which2plot=['TetR_Prot','Gammacl_Prot','LacI_Prot','GFP_Prot'])
 

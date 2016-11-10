@@ -17,10 +17,10 @@ import matplotlib.pyplot as plt
 
 
 # Initial conditions
-user_input = ['Pred', 40.0,
-              'Prey', 160.0]
+user_input = ['Pred', 400.0,
+              'Prey', 1600.0]
 # Constants (this is not necessary, they could be filled up already in the reaction tuple)
-k=[5,0.09,0.01,1]
+k=[5,0.009,0.001,1]
 
 # Reaction template ((stoch_1,reactant_1,stoch_2,reactant_2),(stoch_1,product_1,stoch_2,product_2),k)
 # dx = A * x - B * x * y
