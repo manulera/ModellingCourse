@@ -15,7 +15,7 @@ k = (10,10)
 # Reaction template ((stoch_1,reactant_1,stoch_2,reactant_2),(stoch_1,product_1,stoch_2,product_2),k)
 reactions = (
 
-(-1,'DNA'), (1, 'mRNA'), 100 , #This is the only thing that I changed, we almost had it!
+(-1,'DNA'), (1, 'mRNA'), 100 ,
 
 (-1, 'DNAP2'), (1,'mRNA'), 0.005,
 
