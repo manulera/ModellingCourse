@@ -1,4 +1,5 @@
 
+# Functions to analyse the solutions
 import numpy as np
 import math
 import random

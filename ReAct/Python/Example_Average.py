@@ -20,6 +20,10 @@ dt=0.0001
 t = np.arange(0, 0.5, dt)
 
 fig, ax = plt.subplots()
+# Run four rounds, in each rounds make 50 calculations of Gillespie, and for each of the four rounds plot the average
+# to see that it coincides with the analytical solution. GillDeviation was something to measure the deviation of the
+# average curves from the deterministic solution, but I really didnt use it in the course since it didn't give very
+# interesting results. It basically becomes constant after a while. Maybe it's not always like that...
 for i in range(4):
     (solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t,rounds=50)
 

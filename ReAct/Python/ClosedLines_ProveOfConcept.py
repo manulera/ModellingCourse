@@ -1,3 +1,6 @@
+# A very simple script to prove that two functions x(t) y(t), if they are periodic, they produce a closed curve when we
+# plot (x,y). This was useful as a proof of concept for the plotting of the predator-pray plots.
+
 import numpy as np
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt

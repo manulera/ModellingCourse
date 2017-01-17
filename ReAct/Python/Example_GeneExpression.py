@@ -35,7 +35,7 @@ reactions = (
 )
 # dt is used for the deterministic calculation, and the
 dt=1
-t = np.arange(0, 10000, dt)
+t = np.arange(0, 100, dt)
 
 (solution,(tgill, valsgill, _, _),rows,mode)=ReAct(user_input,reactions,t,mode=1)
 
