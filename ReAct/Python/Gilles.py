@@ -3,7 +3,7 @@ import math
 import random
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
-
+import sympy
 # This was done before I was really comfortable with object-oriented programming, so there is definitely room for
 # improving it in that sense, especially to make it the code more clear
 
@@ -189,6 +189,23 @@ def Gillespy(elements, init, t, Gamma, k, decay, rounds=0):
     return np.array(tgill_all), valsgill_all, mus_all, taus_all
 
 
+# This can also be used to solve a linear system in which all reactions are A becomes B with a constant rate.
+def LinearSystem(Gamma,k):
+
+    system = np.zeros([Gamma.shape[0],Gamma.shape[0]])
+    for s,species in enumerate(Gamma):
+        for r,reaction in enumerate(species):
+            if reaction==-1:
+                system[s,s]-= k[r]
+            elif reaction==1:
+                # Look for the positive value
+                s2 = np.where(Gamma[:,r]==-1)[0]
+                system[s,s2] += k[r]
+    return system
+
+
+
+
 # "user_input" is a list of pairs Xi, amount of Xi. Xi being a string with the number of a chemical species. All the
 # chemical species that appear in the reactions must be declared in this list, and given an initial concentration.
 # "reactions" is a tuple with the reactions, see the examples and the notebook to see how to use them.
@@ -277,8 +294,32 @@ def ReAct(user_input, reactions, t, mode=0, rounds=1):
         DetSol(elements, init, t, Gamma, k, decay), Gillespy(elements, init, t, Gamma, k, decay, rounds), row, mode)
     elif mode == 1:  # mode 1: Deterministic solution only
         return (DetSol(elements, init, t, Gamma, k, decay), (None, None, None, None), row, mode)
-    else:  # mode 2: Gillespie only
+    elif mode == 2:  # mode 2: Gillespie only
         return (None, Gillespy(elements, init, t, Gamma, k, decay, rounds), row, mode)
+    elif mode ==3: # mode 3: steady state
+
+        linsys = LinearSystem(Gamma,k)
+
+        # TODO This could be done but one has to know how to identify them
+        # # WE combine the last two just to make it linearly independent
+        # linsys[-2,:] += linsys[-1,:]
+        #
+        # linsys = linsys[:-1,:]
+
+        # we add the condition that the sum gives the total
+
+        sum_total = np.ones([1,linsys.shape[1]])
+
+        linsys = np.concatenate((linsys, sum_total), axis=0)
+
+
+        # All equations are equal to zero except for the sum of total
+
+        solution = np.zeros(linsys.shape[0])
+
+        solution[-1] = np.sum(init)
+
+        return np.linalg.lstsq(linsys,solution)
 
 
 def Gillesplot(solution, t, tgill, valsgill, rows, mode, which2plot=False):
