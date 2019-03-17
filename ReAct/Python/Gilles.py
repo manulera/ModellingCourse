@@ -3,7 +3,7 @@ import math
 import random
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
-import sympy
+
 # This was done before I was really comfortable with object-oriented programming, so there is definitely room for
 # improving it in that sense, especially to make it the code more clear
 
